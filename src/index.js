@@ -52,26 +52,41 @@ function dogCardMaker({ imageURL, breed }) {
 //    * ON SUCCESS: use the data to create dogCards and append them to the entry point
 //    * ON FAILURE: log the error to the console
 //    * IN ANY CASE: log "done" to the console
-axios.get('https://dog.ceo/api/breed/bluetick/images/random/1')
-  .then(response => {
-    console.log(response);
-    const breed = 'bluetick';
-    const imageURL = response.data.message[0];
-    const dogCard = dogCardMaker({ imageURL, breed });
-    console.log(dogCard);
-    entryPoint.appendChild(dogCard);
-  })
-  .catch(error => {
-   console.error(error); 
-  })
+// axios.get('https://dog.ceo/api/breed/bluetick/images/random/1')
+//   .then(response => {
+//     console.log(response);
+//     const breed = 'bluetick';
+//     const imageURL = response.data.message[0];
+//     const dogCard = dogCardMaker({ imageURL, breed });
+//     console.log(dogCard);
+//     entryPoint.appendChild(dogCard);
+//   })
+//   .catch(error => {
+//    console.error(error); 
+//   })
 
 // 👉 (OPTIONAL) TASK 6- Wrap the fetching operation inside a function `getDogs`
 // that takes a breed and a count (of dogs)
+function getDogs(breed, number) {
+  axios.get(`https://dog.ceo/api/breed/${breed}/images/random/${number}`)
+  .then(response => {
+    const imageURL = response.data.message[0];
+    const dogCard = dogCardMaker({ imageURL, breed });
+    entryPoint.appendChild(dogCard);
+  })
+  .catch(error => {
+    console.error(error); 
+  })
+}
 
+getDogs('weimaraner', 1);
 
 // 👉 (OPTIONAL) TASK 7- Put a button in index.html to 'get dogs' and add a click
 // event listener that executes `getDogs`
-
+const btn = document.querySelector('.get-dog');
+btn.addEventListener('click', event => {
+  console.log("CLICKED");
+});
 
 // 👉 (OPTIONAL) TASK 8- Import the breeds from `breeds.js`
 // or request them from https://lambda-times-api.herokuapp.com/breeds
