@@ -46,12 +46,24 @@ function dogCardMaker({ imageURL, breed }) {
 //    * Traditional way: put another script tag inside index.html (`https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js`)
 //    * Proyects with npm: install it with npm and import it into this file
 
+/* Added in index.html */
 
 // 👉 TASK 5- Fetch dogs from `https://dog.ceo/api/breed/{breed}/images/random/{number}`
 //    * ON SUCCESS: use the data to create dogCards and append them to the entry point
 //    * ON FAILURE: log the error to the console
 //    * IN ANY CASE: log "done" to the console
-
+axios.get('https://dog.ceo/api/breed/bluetick/images/random/1')
+  .then(response => {
+    console.log(response);
+    const breed = 'bluetick';
+    const imageURL = response.data.message[0];
+    const dogCard = dogCardMaker({ imageURL, breed });
+    console.log(dogCard);
+    entryPoint.appendChild(dogCard);
+  })
+  .catch(error => {
+   console.error(error); 
+  })
 
 // 👉 (OPTIONAL) TASK 6- Wrap the fetching operation inside a function `getDogs`
 // that takes a breed and a count (of dogs)
