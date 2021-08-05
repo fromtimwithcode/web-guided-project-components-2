@@ -1,3 +1,5 @@
+import breeds from './breeds.js';
+
 // 👉 TASK 1- Test out the following endpoints:
 
 //  https://lambda-times-api.herokuapp.com/friends
@@ -70,24 +72,44 @@ function dogCardMaker({ imageURL, breed }) {
 function getDogs(breed, number) {
   axios.get(`https://dog.ceo/api/breed/${breed}/images/random/${number}`)
   .then(response => {
-    const imageURL = response.data.message[0];
-    const dogCard = dogCardMaker({ imageURL, breed });
-    entryPoint.appendChild(dogCard);
+    response.data.message.forEach(imageURL => {
+      const dogCard = dogCardMaker({ imageURL, breed });
+      entryPoint.appendChild(dogCard);
+    })
   })
   .catch(error => {
     console.error(error); 
   })
 }
 
-getDogs('weimaraner', 1);
-
 // 👉 (OPTIONAL) TASK 7- Put a button in index.html to 'get dogs' and add a click
 // event listener that executes `getDogs`
-const btn = document.querySelector('.get-dog');
-btn.addEventListener('click', event => {
-  console.log("CLICKED");
-});
+
+// const btn = document.querySelector('.get-dog');
+// btn.addEventListener('click', event => {
+//   breeds.forEach(breed => {
+//     getDogs(breed, 1);
+//   })
+// });
 
 // 👉 (OPTIONAL) TASK 8- Import the breeds from `breeds.js`
 // or request them from https://lambda-times-api.herokuapp.com/breeds
 // and loop over them, fetching a dog at each iteration
+const btn = document.querySelector('.get-dog');
+btn.addEventListener('click', event => {
+  const num = document.querySelector('.num-dog').value;
+  entryPoint.innerHTML = "";
+
+  if (num > 0) {
+  const dogs = axios.get('https://lambda-times-api.herokuapp.com/breeds')
+    .then(response => {
+      response.data.forEach(breed => {
+        getDogs(breed, num);
+      })
+    }).catch(error => console.error(error))
+  } else {
+    const error = document.createElement('h3');
+    error.textContent = "You've gotta enter a number greater than 0 ya chump!";
+    entryPoint.appendChild(error);
+  }
+});
